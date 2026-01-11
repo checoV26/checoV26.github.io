@@ -1,0 +1,167 @@
+body {
+     margin: 0;
+     font-family: 'Segoe UI', sans-serif;
+     background: linear-gradient(180deg, #fff0f5, #fde2e4);
+     min-height: 100vh;
+ }
+
+ h1 {
+     text-align: center;
+     margin: 20px 0;
+ }
+
+ .app-container {
+     max-width: 1100px;
+     margin: auto;
+     padding: 15px;
+ }
+
+ .sidebar {
+     background: #fff;
+     border-radius: 14px;
+     padding: 10px;
+     max-height: 70vh;
+     overflow-y: auto;
+ }
+
+ .envelope-item {
+     display: flex;
+     gap: 12px;
+     padding: 10px;
+     border-radius: 12px;
+     cursor: pointer;
+     border: 2px solid transparent;
+     transition: .3s;
+ }
+
+ .envelope-item:hover {
+     background: #ffe5ec;
+ }
+
+ .envelope-item.active {
+     background: #ffccd5;
+     border-color: #ff4d6d;
+     box-shadow: 0 4px 10px rgba(255, 77, 109, 0.25);
+ }
+
+ .envelope-icon {
+     font-size: 30px;
+ }
+
+ .envelope-date {
+     font-size: 13px;
+     color: #666;
+ }
+
+ /* SOBRE */
+ .envelope {
+     position: relative;
+     width: 260px;
+     height: 170px;
+     margin: auto;
+     cursor: pointer;
+ }
+
+ .envelope-back {
+     position: absolute;
+     inset: 0;
+     background: #ffb3c6;
+     border-radius: 18px;
+ }
+
+ .envelope-front {
+     position: absolute;
+     bottom: 0;
+     width: 100%;
+     height: 60%;
+     background: #ff8fab;
+     border-radius: 0 0 18px 18px;
+     z-index: 2;
+ }
+
+ .envelope-flap {
+     position: absolute;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     background: #ff4d6d;
+     clip-path: polygon(0 0, 50% 55%, 100% 0);
+     transform-origin: top;
+     transition: transform .8s ease;
+     z-index: 3;
+     border-radius: 18px 18px 0 0;
+ }
+
+ /* CARTA */
+ .letter {
+     background: white;
+     border-radius: 16px;
+     margin-top: 20px;
+     padding: 0 20px;
+     max-height: 0;
+     overflow: hidden;
+     transition: max-height 1.2s ease, padding 1s ease;
+     position: relative;
+ }
+
+ .letter.open {
+     max-height: 70vh;
+     padding: 20px;
+ }
+
+ .letter-date {
+     text-align: right;
+     font-size: 14px;
+     color: #999;
+     margin-bottom: 10px;
+     position: relative;
+     z-index: 2;
+ }
+
+ .letter-content {
+     text-align: justify;
+     white-space: pre-wrap;
+     line-height: 1.6;
+     font-size: 16px;
+     max-height: 50vh;
+     overflow-y: auto;
+     padding-right: 6px;
+     position: relative;
+     z-index: 2;
+ }
+
+ /* 💧 MARCA DE AGUA (VERSIÓN 1) */
+ .watermark {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%) rotate(-20deg);
+     font-size: 42px;
+     font-weight: 700;
+     color: #ff4d6d;
+     opacity: 0.08;
+     pointer-events: none;
+     user-select: none;
+     white-space: nowrap;
+     z-index: 1;
+ }
+
+ .notice {
+     margin-top: 10px;
+     color: #ff4d6d;
+     font-weight: bold;
+     display: none;
+     text-align: center;
+ }
+
+ @media(max-width:768px) {
+     .sidebar {
+         display: flex;
+         gap: 10px;
+         overflow-x: auto;
+     }
+
+     .envelope-item {
+         min-width: 160px;
+     }
+ }
