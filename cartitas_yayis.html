@@ -10,7 +10,333 @@
     <title>Cartas para mi Yayis 💖</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            transition: background 1s;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #ff4d6d;
+            font-size: 2rem;
+        }
+
+        .app-container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        .sidebar {
+            background: #fff;
+            border-radius: 14px;
+            padding: 10px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .envelope-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: .3s;
+        }
+
+        .envelope-item:hover {
+            background: #ffe5ec;
+        }
+
+        .envelope-item.active {
+            background: #ffccd5;
+            border-color: #ff4d6d;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.25);
+        }
+
+        .envelope-icon {
+            font-size: 2rem;
+        }
+
+        .envelope-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* SOBRE */
+        .envelope {
+            position: relative;
+            width: 80%;
+            max-width: 260px;
+            height: 170px;
+            margin: auto;
+            cursor: pointer;
+        }
+
+        .envelope-back {
+            position: absolute;
+            inset: 0;
+            background: #ffb3c6;
+            border-radius: 18px;
+        }
+
+        .envelope-front {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            background: #ff8fab;
+            border-radius: 0 0 18px 18px;
+            z-index: 2;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff4d6d;
+            clip-path: polygon(0 0, 50% 55%, 100% 0);
+            transform-origin: top;
+            transition: transform .8s ease;
+            z-index: 3;
+            border-radius: 18px 18px 0 0;
+        }
+
+        /* CARTA */
+        .letter {
+            background: white;
+            border-radius: 16px;
+            margin-top: 20px;
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 1.2s ease, padding 1s ease;
+            position: relative;
+        }
+
+        .letter.open {
+            max-height: 70vh;
+            padding: 20px;
+        }
+
+        .letter-date {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #000;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .letter-content {
+            text-align: justify;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1rem;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 6px;
+            position: relative;
+            z-index: 2;
+            color: #000;
+        }
+
+        /* MARCA DE AGUA */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff4d6d;
+            opacity: 0.08;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        .notice {
+            margin-top: 10px;
+            color: #ff4d6d;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+        }
+
+        /* MODO DIA */
+        body.day {
+            background: linear-gradient(180deg, #cceeff, #a0e0a0);
+        }
+
+        .trees {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 2rem;
+            text-align: center;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+
+        body.day .trees {
+            opacity: 1;
+        }
+
+        /* MODO NOCHE */
+        body.night {
+            background: linear-gradient(180deg, #0b132b, #1c2541);
+        }
+
+        .moon {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            font-size: 3rem;
+            opacity: 0;
+            transition: opacity .6s;
+            z-index: 1;
+        }
+
+        body.night .moon {
+            opacity: 1;
+        }
+
+        /* ESTRELLAS FIJAS */
+        .star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 2s infinite alternate;
+            z-index: 1;
+        }
+
+        body.night .star {
+            opacity: 1;
+        }
+
+        @keyframes twinkle {
+            from {
+                opacity: 0.2;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ESTRELLAS FUGACES */
+        .shooting-star {
+            position: fixed;
+            width: 3px;
+            height: 100px;
+            background: linear-gradient(to bottom, white, transparent);
+            opacity: 0;
+            animation: shoot 3s linear infinite;
+            z-index: 1;
+            display: none;
+        }
+
+        body.night .shooting-star {
+            display: block;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translate(0, 0) rotate(-45deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-300px, 300px) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            padding: 8px 15px;
+            background: #ff4d6d;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        @media(max-width: 992px) {
+            .envelope {
+                width: 60%;
+                height: 140px;
+            }
+
+            .moon {
+                font-size: 2.2rem;
+                right: 20px;
+                top: 15px;
+            }
+
+            .trees {
+                font-size: 1.5rem;
+            }
+
+            .letter-content {
+                font-size: 0.95rem;
+            }
+
+            .letter-date {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media(max-width: 576px) {
+            .envelope {
+                width: 90%;
+                height: 120px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .moon {
+                font-size: 1.8rem;
+                right: 15px;
+                top: 10px;
+            }
+
+            .trees {
+                font-size: 1.2rem;
+            }
+
+            .letter-content {
+                font-size: 0.9rem;
+            }
+
+            .letter-date {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -60,7 +386,303 @@
     <div class="star" style="top:75%; left:30%;"></div>
     <div class="star" style="top:85%; left:90%;"></div>
 
-    <script src="./js/cartas.js"></script>
+    <script>
+        const letters = [
+            {
+                date: "2026-01-10",
+                text: `
+💖 TE AMO MUCHO 💖
+MI YAYIS ❤️✨
+
+Eres lo más bonito 🌸
+que me ha pasado en la vida 💫
+`,
+                secret: false,
+            },
+            {
+                date: "2026-01-10",
+                text: `
+Gracias por cada sonrisa 😊,
+por cada abrazo 🤗
+y por existir 💖✨
+`,
+                secret: false,
+            },
+            {
+                date: "2026-01-10",
+                text: `
+Prometo cuidarte 🛡️❤️,
+respetarte 🤍
+y amarte todos los días 💍✨
+`,
+                secret: false,
+            },
+            {
+                date: "2026-01-10",
+                text: `💞 Si recordaste este día 💞,
+es porque nuestro amor ❤️
+vive en tu corazón 💖✨
+
+Ese anillo 💍 no fue una promesa,
+fue la certeza ✨
+de que quiero caminar contigo 🚶‍♂️🚶‍♀️
+toda la vida 💫💕
+
+Te amo eternamente ♾️❤️
+
+— Tu siempre enamorado 💘
+Sergio Marcos ❤️`,
+                secret: true,
+                question:
+                    "💍✨ ¿Recuerdas la fecha en la que un anillo selló nuestro amor para siempre? ❤️💖",
+                answer: "29/12/2025",
+                answerType: "date",
+            },
+            {
+                date: "2026-01-02",
+                text: `
+Mi adorada Yayis ❤️🌹:
+
+Hoy me desperté pensando en ti 💭💖 y en la suerte que tengo de tenerte conmigo.
+Quería recordarte lo mucho que te amo ❤️✨ y lo importante que eres para mí.
+
+Te escribo porque a veces el corazón 💓 se me llena tanto de ti que las palabras necesitan salir.
+Quiero que sepas, hoy más que nunca 🌅, lo mucho que te amo 💘.
+
+Lo que siento por ti va mucho más allá de un simple sentimiento 💞,
+es un cariño incondicional 🤍.
+No importa el día, el lugar o la circunstancia 🌎✨,
+mi amor por ti permanece intacto ❤️,
+firme y dispuesto a todo para verte feliz 😊💖.
+
+Eres mi refugio 🏡💫,
+mi lugar seguro 🤗
+y la persona que le da un brillo especial ✨ a mi mundo 🌍.
+
+Gracias por ser como eres 🌸,
+por tu ternura 💕
+y por caminar a mi lado 👣❤️.
+
+Te amo 💞 con todo mi ser,
+Sergio Marcos 💘
+`,
+                secret: false,
+            },
+            {
+                date: "2026-01-01",
+                text: `
+Mi amor 💞✨,
+
+No quería dejar pasar ni un segundo ⏳ de este nuevo año 🎆
+sin decirte lo que significas para mí ❤️.
+
+Mientras el mundo celebra un nuevo comienzo 🌟,
+mi único deseo es que ese comienzo sea siempre a tu lado 🤍.
+
+Eres la razón de mis mejores sonrisas 😊
+y mi mayor motivación 💪💖.
+Este año que comienza 🗓️,
+estoy dispuesto a darlo todo por ti y por nosotros ❤️✨.
+
+Te deseo un año lleno de luz ✨,
+de éxitos 🌈
+y de mucha salud 💐 mi amor.
+
+¡Feliz Año Nuevo, vida mía! 🎉💖
+
+Sergio Marcos ❤️
+`,
+                secret: false,
+            },
+            {
+                date: "2025-12-31",
+                text: `
+Mi adorada Yayis ❤️✨,
+
+Hoy me detuve un momento ⏳ a pensar en todo lo que hemos vivido 💭
+y no quería dejar pasar el día sin decirte
+lo mucho que significas para mí 💖.
+
+Cada risa 😂,
+cada salida 🚶‍♀️🚶‍♂️
+y hasta los momentos de calma 🌙
+han sido los mejores de mi vida ❤️.
+
+Cualquier lugar es especial 🌍✨
+si tú estás ahí conmigo 🤍.
+
+Te quiero, te amo y te adoro 💘
+con toda mi alma 💓.
+
+Mi mayor deseo 🌟
+es que este año sea solo uno de muchísimos más ♾️,
+porque quiero estar por siempre a tu lado ❤️.
+
+Con todo mi amor,
+Sergio Marcos 😍
+`,
+                secret: false,
+            },
+            {
+                date: "2026-01-10",
+                text: `
+Hola, mi Yayis hermosa ❤️🌹,
+
+Hoy, 10 de enero de 2026 📅,
+quiero regalarte estas palabras 💌
+que nacen directo de mi corazón 💖.
+
+Eres mi sueño hecho realidad ✨,
+mi reina 👑,
+mi todo ❤️.
+
+Cada noche 🌙
+siento que me haces falta 💭,
+que quiero volar ✈️ hasta tus brazos 🤗.
+
+Siempre estaré aquí para ti 🛡️❤️,
+para cuidarte, protegerte
+y amarte sin condiciones 💞.
+
+Te amo con todo mi corazón 💓,
+mi Yayis hermosa ❤️😍
+
+Tu siempre enamorado,
+Sergio Marcos 💘
+`,
+                secret: false,
+            },
+            {
+                date: "2026-01-06",
+                text: `
+Para mi querida Yayis ❤️😍,
+
+Amor 💞,
+soy afortunado 🍀 por tenerte a mi lado
+y por compartir la vida contigo ✨.
+
+Eres mi apoyo 🤍,
+mi refugio 🏡
+y mi razón para sonreír 😊.
+
+Mi promesa es simple y sincera 💍:
+siempre estaré contigo ❤️.
+
+Te amo con todo mi corazón 💓
+
+Sergio Marcos 💘
+`,
+                secret: false,
+            },
+            {
+                date: "2025-12-26",
+                text: `
+Cuando te conocí 💫,
+no imaginé que te volverías tan importante para mí ❤️.
+
+Hoy no puedo pasar un solo día 🌅
+sin hablar contigo 💬💖.
+
+Nuestro amor creció sin darnos cuenta 🌱✨
+y ahora eres parte de mi vida 💞.
+`,
+                secret: false,
+            },
+        ];
+
+        letters.sort(() => Math.random() - 0.5);
+
+        const sidebar = document.getElementById("sidebar");
+        const letter = document.getElementById("letter");
+        const letterContent = document.getElementById("letterContent");
+        const letterDate = document.getElementById("letterDate");
+        const notice = document.getElementById("notice");
+
+        let selectedIndex = null, isOpen = false;
+
+        function normalizeDate(value) { if (!value) return ""; if (value.includes("-")) { const [y, m, d] = value.split("-"); return `${d}/${m}/${y}` } return value; }
+
+        letters.forEach((l, i) => {
+            const [y, m, d] = l.date.split("-");
+            const safeDate = new Date(y, m - 1, d);
+            const shortDate = safeDate.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" });
+            const div = document.createElement("div");
+            div.className = "envelope-item";
+            div.dataset.index = i;
+            div.innerHTML = `<div class="envelope-icon">${l.secret ? "🔒" : "✉️"}</div>
+                             <div><strong>Carta</strong><br><span class="envelope-date">${shortDate}</span></div>`;
+            div.onclick = () => selectLetter(i);
+            sidebar.appendChild(div);
+        });
+
+        function selectLetter(index) { closeLetter(); selectedIndex = index; letterContent.textContent = ""; document.querySelectorAll(".envelope-item").forEach(el => el.classList.remove("active")); document.querySelector(`[data-index="${index}"]`).classList.add("active"); notice.style.display = "none"; }
+
+        function openLetter() {
+            if (selectedIndex === null) { notice.style.display = "block"; return; }
+            if (isOpen) return;
+            const data = letters[selectedIndex];
+            const showLetter = () => {
+                const [y, m, d] = data.date.split("-");
+                const safeDate = new Date(y, m - 1, d);
+                letterDate.textContent = safeDate.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+                letterContent.textContent = data.text;
+                letter.classList.add("open"); isOpen = true;
+            };
+            if (data.secret) {
+                let inputType = "text";
+
+                if (data.answerType === "number") inputType = "number";
+                if (data.answerType === "date") inputType = "date";
+
+                Swal.fire({
+                    title: "💖 Carta secreta",
+                    text: data.question,
+                    input: inputType,
+                    showCancelButton: true,
+                    confirmButtonText: "Abrir carta",
+                    cancelButtonText: "Cancelar",
+                    inputAttributes:
+                        data.answerType === "date"
+                            ? { placeholder: "Selecciona la fecha" }
+                            : {},
+                }).then((result) => {
+                    if (!result.isConfirmed || !result.value) return;
+
+                    let userAnswer = result.value;
+                    let correctAnswer = data.answer;
+
+                    if (data.answerType === "date") {
+                        userAnswer = normalizeDate(userAnswer);
+                    }
+
+                    if (
+                        String(userAnswer).toLowerCase().trim() ===
+                        String(correctAnswer).toLowerCase().trim()
+                    ) {
+                        showLetter();
+                    } else {
+                        Swal.fire(
+                            "Ups 😢💔",
+                            "Esa no es la respuesta correcta, inténtalo de nuevo amor.",
+                            "error"
+                        );
+                    }
+                });
+            } else { showLetter(); }
+        }
+
+        function closeLetter() { letter.classList.remove("open"); isOpen = false; }
+
+        const body = document.body;
+        function setModeByHour() {
+            const hour = new Date().getHours();
+            if (hour >= 19 || hour < 6) { body.classList.add('night'); body.classList.remove('day'); }
+            else { body.classList.add('day'); body.classList.remove('night'); }
+        }
+        function toggleMode() { if (body.classList.contains('night')) { body.classList.remove('night'); body.classList.add('day'); } else { body.classList.remove('day'); body.classList.add('night'); } }
+
+        setModeByHour();
+    </script>
 </body>
 
 </html>
