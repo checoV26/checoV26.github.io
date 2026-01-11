@@ -355,7 +355,6 @@ function openLetter() {
       }
     });
   } else {
-    // 📩 CARTA NORMAL
     showLetter();
   }
 }
@@ -366,4 +365,82 @@ function openLetter() {
 function closeLetter() {
   letter.classList.remove("open");
   isOpen = false;
+}
+
+/**********************************
+ 🌗 MODO DÍA / NOCHE AUTO + MANUAL
+**********************************/
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("toggleMode");
+
+  // 1️⃣ Revisar preferencia guardada
+  const savedMode = localStorage.getItem("themeMode");
+
+  if (savedMode) {
+    applyMode(savedMode);
+  } else {
+    applyAutoMode();
+  }
+
+  // 2️⃣ Click manual
+  toggleBtn.addEventListener("click", () => {
+    const isNight = document.body.classList.contains("night");
+    const newMode = isNight ? "day" : "night";
+
+    applyMode(newMode);
+    localStorage.setItem("themeMode", newMode);
+  });
+});
+
+/**********************************
+ 🌞🌙 FUNCIONES
+**********************************/
+function applyAutoMode() {
+  const hour = new Date().getHours();
+  const isNight = hour >= 19 || hour < 6;
+
+  applyMode(isNight ? "night" : "day");
+}
+
+function applyMode(mode) {
+  clearNightElements();
+
+  if (mode === "night") {
+    document.body.classList.add("night");
+    createMoonAndStars();
+    updateToggleIcon("day");
+  } else {
+    document.body.classList.remove("night");
+    updateToggleIcon("night");
+  }
+}
+
+function updateToggleIcon(nextMode) {
+  const btn = document.getElementById("toggleMode");
+  btn.textContent = nextMode === "night" ? "🌙" : "🌞";
+}
+
+/**********************************
+ 🌙 ELEMENTOS VISUALES
+**********************************/
+function createMoonAndStars() {
+  if (document.querySelector(".moon")) return;
+
+  const moon = document.createElement("div");
+  moon.className = "moon";
+  document.body.appendChild(moon);
+
+  for (let i = 0; i < 40; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.animationDelay = Math.random() * 3 + "s";
+    document.body.appendChild(star);
+  }
+}
+
+function clearNightElements() {
+  document.querySelectorAll(".moon, .star").forEach((el) => el.remove());
 }
