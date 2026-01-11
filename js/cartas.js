@@ -269,7 +269,44 @@ function openLetter() {
     isOpen = true;
   };
   if (data.secret) {
-    /* implementación secreta si aplica */
+    let inputType =
+      data.answerType === "number"
+        ? "number"
+        : data.answerType === "date"
+        ? "date"
+        : "text";
+
+    Swal.fire({
+      title: "💖 Carta secreta",
+      text: data.question || "Responde para abrir la carta",
+      input: inputType,
+      showCancelButton: true,
+      confirmButtonText: "Abrir carta",
+      cancelButtonText: "Cancelar",
+      inputAttributes:
+        data.answerType === "date"
+          ? { placeholder: "Selecciona la fecha" }
+          : {},
+    }).then((result) => {
+      if (!result.isConfirmed || !result.value) return;
+
+      let userAnswer = result.value;
+      let correctAnswer = data.answer;
+      if (data.answerType === "date") userAnswer = normalizeDate(userAnswer);
+
+      if (
+        String(userAnswer).toLowerCase().trim() ===
+        String(correctAnswer).toLowerCase().trim()
+      ) {
+        showLetter();
+      } else {
+        Swal.fire(
+          "Ups 😢💔",
+          "Esa no es la respuesta correcta, inténtalo de nuevo amor.",
+          "error"
+        );
+      }
+    });
   } else {
     showLetter();
   }

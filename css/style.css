@@ -1,325 +1,325 @@
 body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        min-height: 100vh;
-        transition: background 1s;
-        overflow-x: hidden;
-    }
+     margin: 0;
+     font-family: 'Segoe UI', sans-serif;
+     min-height: 100vh;
+     transition: background 1s;
+     overflow-x: hidden;
+ }
 
-    h1 {
-        text-align: center;
-        margin: 20px 0;
-        color: #ff4d6d;
-        font-size: 2rem;
-    }
+ h1 {
+     text-align: center;
+     margin: 20px 0;
+     color: #ff4d6d;
+     font-size: 2rem;
+ }
 
-    .app-container {
-        max-width: 1100px;
-        margin: auto;
-        padding: 15px;
-    }
+ .app-container {
+     max-width: 1100px;
+     margin: auto;
+     padding: 15px;
+ }
 
-    .sidebar {
-        background: #fff;
-        border-radius: 14px;
-        padding: 10px;
-        max-height: 70vh;
-        overflow-y: auto;
-    }
+ .sidebar {
+     background: #fff;
+     border-radius: 14px;
+     padding: 10px;
+     max-height: 70vh;
+     overflow-y: auto;
+ }
 
-    .envelope-item {
-        display: flex;
-        gap: 12px;
-        padding: 10px;
-        border-radius: 12px;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: .3s;
-    }
+ .envelope-item {
+     display: flex;
+     gap: 12px;
+     padding: 10px;
+     border-radius: 12px;
+     cursor: pointer;
+     border: 2px solid transparent;
+     transition: .3s;
+ }
 
-    .envelope-item:hover {
-        background: #ffe5ec;
-    }
+ .envelope-item:hover {
+     background: #ffe5ec;
+ }
 
-    .envelope-item.active {
-        background: #ffccd5;
-        border-color: #ff4d6d;
-        box-shadow: 0 4px 10px rgba(255, 77, 109, 0.25);
-    }
+ .envelope-item.active {
+     background: #ffccd5;
+     border-color: #ff4d6d;
+     box-shadow: 0 4px 10px rgba(255, 77, 109, 0.25);
+ }
 
-    .envelope-icon {
-        font-size: 2rem;
-    }
+ .envelope-icon {
+     font-size: 2rem;
+ }
 
-    .envelope-date {
-        font-size: 0.8rem;
-        color: #666;
-    }
+ .envelope-date {
+     font-size: 0.8rem;
+     color: #666;
+ }
 
-    /* SOBRE */
-    .envelope {
-        position: relative;
-        width: 80%;
-        max-width: 260px;
-        height: 170px;
-        margin: auto;
-        cursor: pointer;
-    }
+ /* SOBRE */
+ .envelope {
+     position: relative;
+     width: 80%;
+     max-width: 260px;
+     height: 170px;
+     margin: auto;
+     cursor: pointer;
+ }
 
-    .envelope-back {
-        position: absolute;
-        inset: 0;
-        background: #ffb3c6;
-        border-radius: 18px;
-    }
+ .envelope-back {
+     position: absolute;
+     inset: 0;
+     background: #ffb3c6;
+     border-radius: 18px;
+ }
 
-    .envelope-front {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 60%;
-        background: #ff8fab;
-        border-radius: 0 0 18px 18px;
-        z-index: 2;
-    }
+ .envelope-front {
+     position: absolute;
+     bottom: 0;
+     width: 100%;
+     height: 60%;
+     background: #ff8fab;
+     border-radius: 0 0 18px 18px;
+     z-index: 2;
+ }
 
-    .envelope-flap {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: #ff4d6d;
-        clip-path: polygon(0 0, 50% 55%, 100% 0);
-        transform-origin: top;
-        transition: transform .8s ease;
-        z-index: 3;
-        border-radius: 18px 18px 0 0;
-    }
+ .envelope-flap {
+     position: absolute;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     background: #ff4d6d;
+     clip-path: polygon(0 0, 50% 55%, 100% 0);
+     transform-origin: top;
+     transition: transform .8s ease;
+     z-index: 3;
+     border-radius: 18px 18px 0 0;
+ }
 
-    /* CARTA */
-    .letter {
-        background: white;
-        border-radius: 16px;
-        margin-top: 20px;
-        padding: 0 20px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 1.2s ease, padding 1s ease;
-        position: relative;
-    }
+ /* CARTA */
+ .letter {
+     background: white;
+     border-radius: 16px;
+     margin-top: 20px;
+     padding: 0 20px;
+     max-height: 0;
+     overflow: hidden;
+     transition: max-height 1.2s ease, padding 1s ease;
+     position: relative;
+ }
 
-    .letter.open {
-        max-height: 70vh;
-        padding: 20px;
-    }
+ .letter.open {
+     max-height: 70vh;
+     padding: 20px;
+ }
 
-    .letter-date {
-        text-align: right;
-        font-size: 0.85rem;
-        color: #000;
-        margin-bottom: 10px;
-        position: relative;
-        z-index: 2;
-    }
+ .letter-date {
+     text-align: right;
+     font-size: 0.85rem;
+     color: #000;
+     margin-bottom: 10px;
+     position: relative;
+     z-index: 2;
+ }
 
-    .letter-content {
-        text-align: justify;
-        white-space: pre-wrap;
-        line-height: 1.6;
-        font-size: 1rem;
-        max-height: 50vh;
-        overflow-y: auto;
-        padding-right: 6px;
-        position: relative;
-        z-index: 2;
-        color: #000;
-    }
+ .letter-content {
+     text-align: justify;
+     white-space: pre-wrap;
+     line-height: 1.6;
+     font-size: 1rem;
+     max-height: 50vh;
+     overflow-y: auto;
+     padding-right: 6px;
+     position: relative;
+     z-index: 2;
+     color: #000;
+ }
 
-    /* MARCA DE AGUA */
-    .watermark {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-20deg);
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #ff4d6d;
-        opacity: 0.08;
-        pointer-events: none;
-        user-select: none;
-        white-space: nowrap;
-        z-index: 1;
-    }
+ /* MARCA DE AGUA */
+ .watermark {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%) rotate(-20deg);
+     font-size: 2.5rem;
+     font-weight: 700;
+     color: #ff4d6d;
+     opacity: 0.08;
+     pointer-events: none;
+     user-select: none;
+     white-space: nowrap;
+     z-index: 1;
+ }
 
-    .notice {
-        margin-top: 10px;
-        color: #ff4d6d;
-        font-weight: bold;
-        display: none;
-        text-align: center;
-    }
+ .notice {
+     margin-top: 10px;
+     color: #ff4d6d;
+     font-weight: bold;
+     display: none;
+     text-align: center;
+ }
 
-    /* MODO DIA */
-    body.day {
-        background: linear-gradient(180deg, #cceeff, #a0e0a0);
-    }
+ /* MODO DIA */
+ body.day {
+     background: linear-gradient(180deg, #cceeff, #a0e0a0);
+ }
 
-    .trees {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        font-size: 2rem;
-        text-align: center;
-        pointer-events: none;
-        user-select: none;
-        opacity: 0;
-        transition: opacity 0.6s;
-    }
+ .trees {
+     position: fixed;
+     bottom: 0;
+     width: 100%;
+     font-size: 2rem;
+     text-align: center;
+     pointer-events: none;
+     user-select: none;
+     opacity: 0;
+     transition: opacity 0.6s;
+ }
 
-    body.day .trees {
-        opacity: 1;
-    }
+ body.day .trees {
+     opacity: 1;
+ }
 
-    /* MODO NOCHE */
-    body.night {
-        background: linear-gradient(180deg, #0b132b, #1c2541);
-    }
+ /* MODO NOCHE */
+ body.night {
+     background: linear-gradient(180deg, #0b132b, #1c2541);
+ }
 
-    .moon {
-        position: fixed;
-        top: 20px;
-        right: 80px;
-        font-size: 3rem;
-        opacity: 0;
-        transition: opacity .6s;
-        z-index: 1;
-    }
+ .moon {
+     position: fixed;
+     top: 20px;
+     right: 80px;
+     font-size: 3rem;
+     opacity: 0;
+     transition: opacity .6s;
+     z-index: 1;
+ }
 
-    body.night .moon {
-        opacity: 1;
-    }
+ body.night .moon {
+     opacity: 1;
+ }
 
-    /* ESTRELLAS FIJAS */
-    .star {
-        position: fixed;
-        width: 2px;
-        height: 2px;
-        background: white;
-        border-radius: 50%;
-        opacity: 0;
-        animation: twinkle 2s infinite alternate;
-        z-index: 1;
-    }
+ /* ESTRELLAS FIJAS */
+ .star {
+     position: fixed;
+     width: 2px;
+     height: 2px;
+     background: white;
+     border-radius: 50%;
+     opacity: 0;
+     animation: twinkle 2s infinite alternate;
+     z-index: 1;
+ }
 
-    body.night .star {
-        opacity: 1;
-    }
+ body.night .star {
+     opacity: 1;
+ }
 
-    @keyframes twinkle {
-        from {
-            opacity: 0.2;
-        }
+ @keyframes twinkle {
+     from {
+         opacity: 0.2;
+     }
 
-        to {
-            opacity: 1;
-        }
-    }
+     to {
+         opacity: 1;
+     }
+ }
 
-    /* ESTRELLAS FUGACES */
-    .shooting-star {
-        position: fixed;
-        width: 3px;
-        height: 100px;
-        background: linear-gradient(to bottom, white, transparent);
-        opacity: 0;
-        animation: shoot 3s linear infinite;
-        z-index: 1;
-        display: none;
-    }
+ /* ESTRELLAS FUGACES */
+ .shooting-star {
+     position: fixed;
+     width: 3px;
+     height: 100px;
+     background: linear-gradient(to bottom, white, transparent);
+     opacity: 0;
+     animation: shoot 3s linear infinite;
+     z-index: 1;
+     display: none;
+ }
 
-    body.night .shooting-star {
-        display: block;
-    }
+ body.night .shooting-star {
+     display: block;
+ }
 
-    @keyframes shoot {
-        0% {
-            transform: translate(0, 0) rotate(-45deg);
-            opacity: 0;
-        }
+ @keyframes shoot {
+     0% {
+         transform: translate(0, 0) rotate(-45deg);
+         opacity: 0;
+     }
 
-        20% {
-            opacity: 1;
-        }
+     20% {
+         opacity: 1;
+     }
 
-        100% {
-            transform: translate(-300px, 300px) rotate(-45deg);
-            opacity: 0;
-        }
-    }
+     100% {
+         transform: translate(-300px, 300px) rotate(-45deg);
+         opacity: 0;
+     }
+ }
 
-    .mode-toggle {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 100;
-        padding: 8px 15px;
-        background: #ff4d6d;
-        border: none;
-        border-radius: 12px;
-        color: #fff;
-        cursor: pointer;
-    }
+ .mode-toggle {
+     position: fixed;
+     top: 20px;
+     left: 20px;
+     z-index: 100;
+     padding: 8px 15px;
+     background: #ff4d6d;
+     border: none;
+     border-radius: 12px;
+     color: #fff;
+     cursor: pointer;
+ }
 
-    @media(max-width: 992px) {
-        .envelope {
-            width: 60%;
-            height: 140px;
-        }
+ @media(max-width: 992px) {
+     .envelope {
+         width: 60%;
+         height: 140px;
+     }
 
-        .moon {
-            font-size: 2.2rem;
-            right: 20px;
-            top: 15px;
-        }
+     .moon {
+         font-size: 2.2rem;
+         right: 20px;
+         top: 15px;
+     }
 
-        .trees {
-            font-size: 1.5rem;
-        }
+     .trees {
+         font-size: 1.5rem;
+     }
 
-        .letter-content {
-            font-size: 0.95rem;
-        }
+     .letter-content {
+         font-size: 0.95rem;
+     }
 
-        .letter-date {
-            font-size: 0.8rem;
-        }
-    }
+     .letter-date {
+         font-size: 0.8rem;
+     }
+ }
 
-    @media(max-width: 576px) {
-        .envelope {
-            width: 90%;
-            height: 120px;
-        }
+ @media(max-width: 576px) {
+     .envelope {
+         width: 90%;
+         height: 120px;
+     }
 
-        h1 {
-            font-size: 1.5rem;
-        }
+     h1 {
+         font-size: 1.5rem;
+     }
 
-        .moon {
-            font-size: 1.8rem;
-            right: 15px;
-            top: 10px;
-        }
+     .moon {
+         font-size: 1.8rem;
+         right: 15px;
+         top: 10px;
+     }
 
-        .trees {
-            font-size: 1.2rem;
-        }
+     .trees {
+         font-size: 1.2rem;
+     }
 
-        .letter-content {
-            font-size: 0.9rem;
-        }
+     .letter-content {
+         font-size: 0.9rem;
+     }
 
-        .letter-date {
-            font-size: 0.75rem;
-        }
-    }
+     .letter-date {
+         font-size: 0.75rem;
+     }
+ }
