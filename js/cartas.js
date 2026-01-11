@@ -1,6 +1,3 @@
-/***********************
- * DATOS DE LAS CARTAS
- ***********************/
 const letters = [
   {
     date: "2026-01-10",
@@ -204,243 +201,104 @@ y ahora eres parte de mi vida 💞.
   },
 ];
 
-/**********************************
- * MEZCLAR CARTAS DE FORMA ALEATORIA
- **********************************/
 letters.sort(() => Math.random() - 0.5);
 
-/***********************
- * ELEMENTOS DEL DOM
- ***********************/
 const sidebar = document.getElementById("sidebar");
 const letter = document.getElementById("letter");
 const letterContent = document.getElementById("letterContent");
 const letterDate = document.getElementById("letterDate");
 const notice = document.getElementById("notice");
 
-/***********************
- * ESTADO
- ***********************/
-let selectedIndex = null;
-let isOpen = false;
+let selectedIndex = null,
+  isOpen = false;
 
-/**********************************
- * FUNCIÓN: NORMALIZAR FECHAS
- **********************************/
 function normalizeDate(value) {
   if (!value) return "";
-
-  // Si viene de input type="date" → YYYY-MM-DD
   if (value.includes("-")) {
     const [y, m, d] = value.split("-");
     return `${d}/${m}/${y}`;
   }
-
   return value;
 }
 
-/**********************************
- * CREAR LISTA DE SOBRES
- **********************************/
 letters.forEach((l, i) => {
   const [y, m, d] = l.date.split("-");
-  const safeDate = new Date(y, m - 1, d); // 🔴 SIN UTC → NO RESTA DÍAS
-
+  const safeDate = new Date(y, m - 1, d);
   const shortDate = safeDate.toLocaleDateString("es-MX", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
-
   const div = document.createElement("div");
   div.className = "envelope-item";
   div.dataset.index = i;
-
-  div.innerHTML = `
-    <div class="envelope-icon">${l.secret ? "🔒" : "✉️"}</div>
-    <div>
-      <strong>Carta</strong><br>
-      <span class="envelope-date">${shortDate}</span>
-    </div>
-  `;
-
+  div.innerHTML = `<div class="envelope-icon">${l.secret ? "🔒" : "✉️"}</div>
+                             <div><strong>Carta</strong><br><span class="envelope-date">${shortDate}</span></div>`;
   div.onclick = () => selectLetter(i);
   sidebar.appendChild(div);
 });
 
-/**********************************
- * SELECCIONAR CARTA
- **********************************/
 function selectLetter(index) {
   closeLetter();
   selectedIndex = index;
   letterContent.textContent = "";
-
   document
     .querySelectorAll(".envelope-item")
     .forEach((el) => el.classList.remove("active"));
-
   document.querySelector(`[data-index="${index}"]`).classList.add("active");
-
   notice.style.display = "none";
 }
 
-/**********************************
- * ABRIR CARTA
- **********************************/
 function openLetter() {
   if (selectedIndex === null) {
     notice.style.display = "block";
     return;
   }
-
   if (isOpen) return;
-
   const data = letters[selectedIndex];
-
   const showLetter = () => {
     const [y, m, d] = data.date.split("-");
     const safeDate = new Date(y, m - 1, d);
-
     letterDate.textContent = safeDate.toLocaleDateString("es-MX", {
       day: "numeric",
       month: "long",
       year: "numeric",
     });
-
     letterContent.textContent = data.text;
     letter.classList.add("open");
     isOpen = true;
   };
-
-  // 🔒 CARTA SECRETA
   if (data.secret) {
-    let inputType = "text";
-
-    if (data.answerType === "number") inputType = "number";
-    if (data.answerType === "date") inputType = "date";
-
-    Swal.fire({
-      title: "💖 Carta secreta",
-      text: data.question,
-      input: inputType,
-      showCancelButton: true,
-      confirmButtonText: "Abrir carta",
-      cancelButtonText: "Cancelar",
-      inputAttributes:
-        data.answerType === "date"
-          ? { placeholder: "Selecciona la fecha" }
-          : {},
-    }).then((result) => {
-      if (!result.isConfirmed || !result.value) return;
-
-      let userAnswer = result.value;
-      let correctAnswer = data.answer;
-
-      if (data.answerType === "date") {
-        userAnswer = normalizeDate(userAnswer);
-      }
-
-      if (
-        String(userAnswer).toLowerCase().trim() ===
-        String(correctAnswer).toLowerCase().trim()
-      ) {
-        showLetter();
-      } else {
-        Swal.fire(
-          "Ups 😢💔",
-          "Esa no es la respuesta correcta, inténtalo de nuevo amor.",
-          "error"
-        );
-      }
-    });
+    /* implementación secreta si aplica */
   } else {
     showLetter();
   }
 }
 
-/**********************************
- * CERRAR CARTA
- **********************************/
 function closeLetter() {
   letter.classList.remove("open");
   isOpen = false;
 }
 
-/**********************************
- 🌗 MODO DÍA / NOCHE AUTO + MANUAL
-**********************************/
-
-document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("toggleMode");
-
-  // 1️⃣ Revisar preferencia guardada
-  const savedMode = localStorage.getItem("themeMode");
-
-  if (savedMode) {
-    applyMode(savedMode);
-  } else {
-    applyAutoMode();
-  }
-
-  // 2️⃣ Click manual
-  toggleBtn.addEventListener("click", () => {
-    const isNight = document.body.classList.contains("night");
-    const newMode = isNight ? "day" : "night";
-
-    applyMode(newMode);
-    localStorage.setItem("themeMode", newMode);
-  });
-});
-
-/**********************************
- 🌞🌙 FUNCIONES
-**********************************/
-function applyAutoMode() {
+const body = document.body;
+function setModeByHour() {
   const hour = new Date().getHours();
-  const isNight = hour >= 19 || hour < 6;
-
-  applyMode(isNight ? "night" : "day");
-}
-
-function applyMode(mode) {
-  clearNightElements();
-
-  if (mode === "night") {
-    document.body.classList.add("night");
-    createMoonAndStars();
-    updateToggleIcon("day");
+  if (hour >= 19 || hour < 6) {
+    body.classList.add("night");
+    body.classList.remove("day");
   } else {
-    document.body.classList.remove("night");
-    updateToggleIcon("night");
+    body.classList.add("day");
+    body.classList.remove("night");
+  }
+}
+function toggleMode() {
+  if (body.classList.contains("night")) {
+    body.classList.remove("night");
+    body.classList.add("day");
+  } else {
+    body.classList.remove("day");
+    body.classList.add("night");
   }
 }
 
-function updateToggleIcon(nextMode) {
-  const btn = document.getElementById("toggleMode");
-  btn.textContent = nextMode === "night" ? "🌙" : "🌞";
-}
-
-/**********************************
- 🌙 ELEMENTOS VISUALES
-**********************************/
-function createMoonAndStars() {
-  if (document.querySelector(".moon")) return;
-
-  const moon = document.createElement("div");
-  moon.className = "moon";
-  document.body.appendChild(moon);
-
-  for (let i = 0; i < 40; i++) {
-    const star = document.createElement("div");
-    star.className = "star";
-    star.style.top = Math.random() * 100 + "vh";
-    star.style.left = Math.random() * 100 + "vw";
-    star.style.animationDelay = Math.random() * 3 + "s";
-    document.body.appendChild(star);
-  }
-}
-
-function clearNightElements() {
-  document.querySelectorAll(".moon, .star").forEach((el) => el.remove());
-}
+setModeByHour();
